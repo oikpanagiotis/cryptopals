@@ -98,7 +98,7 @@ int main(void) {
         scores_count++;
     }
 
-    // find top scoring key
+    // find top scoring buf
     i32 max_score_idx = 0;
     for (size_t i = 0; i < scores_count; i++) {
         i32 current_score = scores[i];
