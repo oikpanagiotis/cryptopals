@@ -36,8 +36,8 @@ char nibble_to_hex(u8 nibble) {
     return 'a' + (nibble - 10);
 }
 
-// b64 digit(6 bits)  111111
-// hex digit(4 bits)    1111
+// b64 digit(6 bits)  00111111
+// hex digit(4 bits)  00001111
 //
 // 3 hex -> 2 b64 
 char *hex_to_base64(const char *hex) {

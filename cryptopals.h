@@ -27,10 +27,13 @@ typedef struct buf_t {
 } buf_t;
 
 u8 hex_to_nibble(char hex_digit);
-char *hex_to_base64(const char *hex);
+char nibble_to_hex(u8 nibble);
+
 buf_t hex_to_buf(const char *hex);
 buf_t fixed_xor(buf_t buf1, buf_t buf2);
 char *buf_to_hex(buf_t buf);
+
+char *hex_to_base64(const char *hex);
 bool string_equals(const char *s1, const char *s2);
 
 #endif
