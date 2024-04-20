@@ -41,5 +41,6 @@ void print_buf_hex(buf_t buf);
 
 char *hex_to_base64(const char *hex);
 bool string_equals(const char *s1, const char *s2);
+i32 get_char_score(char character);
 
 #endif
