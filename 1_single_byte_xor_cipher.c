@@ -53,6 +53,8 @@ int main(void) {
 
     buf_t key = key_candidates[max_score_idx];
     buf_t result = fixed_xor(cipher_buf, key);
+    printf("Key found! Decrypting with ");
+    print_buf_ascii(key);
     print_buf_ascii(result);
 
     for (size_t i = 0; i < keys_count; i++) {

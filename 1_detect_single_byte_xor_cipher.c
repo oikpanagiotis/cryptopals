@@ -111,6 +111,8 @@ int main(void) {
     buf_t buf = bufs[max_score_idx];
     buf_t key = key_candidates[highest_scoring_key_idx];
     buf_t result = fixed_xor(buf, key);
+    printf("Key found! Decrypting with ");
+    print_buf_ascii(key);
     print_buf_ascii(result);
 
     for (size_t i = 0; i < keys_count; i++) {
