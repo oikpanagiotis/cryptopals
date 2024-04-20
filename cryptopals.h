@@ -31,8 +31,10 @@ typedef struct buf_t {
 u8 hex_to_nibble(char hex_digit);
 char nibble_to_hex(u8 nibble);
 
+buf_t ascii_to_buf(const char *str);
 buf_t hex_to_buf(const char *hex);
 buf_t fixed_xor(buf_t buf1, buf_t buf2);
+buf_t repeating_xor(buf_t buf, buf_t key);
 char *buf_to_hex(buf_t buf);
 
 void print_buf_raw(buf_t buf);

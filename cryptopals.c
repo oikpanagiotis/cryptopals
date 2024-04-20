@@ -65,6 +65,13 @@ char *hex_to_base64(const char *hex) {
     return buf;
 }
 
+buf_t ascii_to_buf(const char *str) {
+    size_t len = strlen(str);
+    u8 *buf = malloc(len);
+    memcpy(buf, str, len);
+    return (buf_t){buf, len};
+}
+
 buf_t hex_to_buf(const char *hex) {
     size_t hex_len = strlen(hex);
     size_t buf_len = hex_len / 2;
@@ -90,6 +97,19 @@ buf_t fixed_xor(buf_t buf1, buf_t buf2) {
         result.data[i] = buf1.data[i] ^ buf2.data[i];
     }
 
+    return result;
+}
+
+buf_t repeating_xor(buf_t buf, buf_t key) {
+    buf_t result = (buf_t){
+        .data = malloc(buf.len),
+        .len = buf.len
+    };
+    size_t xored = 0;
+    for (size_t i = 0; i < buf.len; i++) {
+        size_t key_idx = xored++ % key.len;
+        result.data[i] = buf.data[i] ^ key.data[key_idx];
+    }
     return result;
 }
 
@@ -122,7 +142,7 @@ void print_buf_ascii(buf_t buf) {
 
 void print_buf_hex(buf_t buf) {
     for (size_t i = 0; i < buf.len; i++) {
-        printf("%x", buf.data[i]);
+        printf("%02x", buf.data[i]);
     }
     printf("\n");
 }
