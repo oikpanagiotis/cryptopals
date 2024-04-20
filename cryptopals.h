@@ -20,6 +20,8 @@ typedef float f32;
 typedef double f64;
 
 #define array_len(arr) (sizeof(arr) / sizeof(arr[0]))
+#define max(a, b) ((a > b) ? a : b)
+#define min(a, b) ((a < b) ? a : b)
 
 typedef struct buf_t {
     u8 *data;
@@ -32,6 +34,10 @@ char nibble_to_hex(u8 nibble);
 buf_t hex_to_buf(const char *hex);
 buf_t fixed_xor(buf_t buf1, buf_t buf2);
 char *buf_to_hex(buf_t buf);
+
+void print_buf_raw(buf_t buf);
+void print_buf_ascii(buf_t buf);
+void print_buf_hex(buf_t buf);
 
 char *hex_to_base64(const char *hex);
 bool string_equals(const char *s1, const char *s2);

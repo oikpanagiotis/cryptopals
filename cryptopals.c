@@ -106,9 +106,31 @@ char *buf_to_hex(buf_t buf) {
     return hexstr;
 }
 
+void print_buf_raw(buf_t buf) {
+    for (size_t i = 0; i < buf.len; i++) {
+        printf("%d", buf.data[i]);
+    }
+    printf("\n");
+}
+
+void print_buf_ascii(buf_t buf) {
+    for (size_t i = 0; i < buf.len; i++) {
+        printf("%c", (char)buf.data[i]);
+    }
+    printf("\n");
+}
+
+void print_buf_hex(buf_t buf) {
+    for (size_t i = 0; i < buf.len; i++) {
+        printf("%x", buf.data[i]);
+    }
+    printf("\n");
+}
+
 bool string_equals(const char *s1, const char *s2) {
     if (!s1 || !s2) {
         return false;
     }
     return strcmp(s1, s2) == 0;
 }
+
