@@ -6,10 +6,11 @@ const char *to_encrypt = "Burning 'em, if you ain't quick and nimble\nI go crazy
 const char *encryption_key = "ICE";
 
 void cli_mode(int argc, char *argv[]) {
-    if (argc != 2) {
-        printf("Usage: ./repeat_xor <filename>\n");
+    if (argc > 3) {
+        printf("Usage: ./repeat_xor <filename> <[optional]key>\n");
         exit(0);
     }
+    const char *encrypt_with = argc > 2 ? argv[2] : encryption_key;
 
     char *filename = argv[1];
     FILE *f = fopen(filename, "rb");
@@ -21,7 +22,7 @@ void cli_mode(int argc, char *argv[]) {
     fread(file_buf, size, 1, f);
     fclose(f);
 
-    buf_t key = ascii_to_buf(encryption_key);
+    buf_t key = ascii_to_buf(encrypt_with);
     buf_t buf = (buf_t){file_buf, size};
     buf_t result = repeating_xor(buf, key);
 
