@@ -8,6 +8,7 @@ const char *encryption_key = "ICE";
 void cli_mode(int argc, char *argv[]) {
     if (argc != 2) {
         printf("Usage: ./repeat_xor <filename>\n");
+        exit(0);
     }
 
     char *filename = argv[1];
