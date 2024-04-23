@@ -72,7 +72,7 @@ int main(void) {
     size_t num_blocks = cipher_buf.len / key_size;
     u8 *blocks = malloc(num_blocks * key_size);
     for (size_t i = 0; i < num_blocks; i += key_size) {
-        memcpy(blocks + i, cipher_buf.data, key_size);
+        memcpy(blocks + i, cipher_buf.data + i, key_size);
     }
 
     // transpose blocks so first one has all first bytes, ...
