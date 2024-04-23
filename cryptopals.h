@@ -20,8 +20,8 @@ typedef float f32;
 typedef double f64;
 
 #define array_len(arr) (sizeof(arr) / sizeof(arr[0]))
-#define max(a, b) ((a > b) ? a : b)
-#define min(a, b) ((a < b) ? a : b)
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#define min(a, b) (((a) < (b)) ? (a) : (b))
 
 typedef struct buf_t {
     u8 *data;
@@ -29,19 +29,24 @@ typedef struct buf_t {
 } buf_t;
 
 u8 hex_to_nibble(char hex_digit);
+u8 base64_char_to_byte(char c);
 char nibble_to_hex(u8 nibble);
 
 buf_t ascii_to_buf(const char *str);
 buf_t hex_to_buf(const char *hex);
+buf_t base64_to_buf(char *b64);
 buf_t fixed_xor(buf_t buf1, buf_t buf2);
 buf_t repeating_xor(buf_t buf, buf_t key);
 char *buf_to_hex(buf_t buf);
+char *buf_to_str(buf_t buf);
 
 void print_buf_raw(buf_t buf);
 void print_buf_ascii(buf_t buf);
 void print_buf_hex(buf_t buf);
 
 char *hex_to_base64(const char *hex);
+size_t hamming_distance(char *s1, char *s2);
+size_t hamming_distance_buf(buf_t b1, buf_t b2);
 bool string_equals(const char *s1, const char *s2);
 i32 get_char_score(char character);
 

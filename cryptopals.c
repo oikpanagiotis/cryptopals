@@ -28,6 +28,27 @@ u8 hex_to_nibble(char hex_digit) {
     }
 }
 
+u8 base64_char_to_byte(char c) {
+    if (c >= 'A' && c <= 'Z'){
+        return c - 'A';
+    }
+    if (c >= 'a' && c <= 'z') {
+        return c - 'a' + 26;
+    }
+    if (c >= '0' && c <= '9') {
+        return c - '0' + 52;
+    }
+    if (c == '+') {
+        return 62;
+    }
+    if (c == '/') {
+        return 63;
+    }
+    printf("Non base64 character: %c\n", c);
+    assert(NULL && "Invalid character");
+    return 0;
+}
+
 char nibble_to_hex(u8 nibble) {
     if (nibble <= 9) {
         return '0' + nibble;
@@ -86,6 +107,35 @@ buf_t hex_to_buf(const char *hex) {
     return (buf_t){buf, buf_len};
 }
 
+buf_t base64_to_buf(char *b64) {
+    size_t b64_len = strlen(b64);
+    i32 padding = 0;
+    for (size_t i = 0; i < b64_len; i++) {
+        if (b64[i] == '=') {
+            padding++;
+        }
+    }
+
+    size_t buf_len = (b64_len * 3) / 4 - padding;
+    u8 *buf = malloc(buf_len);
+
+    for (size_t i = 0, j = 0; i < buf_len; i += 4, j += 3) {
+        assert(i + 4 < b64_len && "Invalid idx for base64");
+        assert(j + 3 < buf_len && "Invalid idx for bytes");
+
+        // 6 bits for each base64 character
+        u8 byte1 = base64_char_to_byte(b64[i]);
+        u8 byte2 = base64_char_to_byte(b64[i + 1]);
+        u8 byte3 = base64_char_to_byte(b64[i + 2]);
+        u8 byte4 = base64_char_to_byte(b64[i + 3]);
+
+        buf[j] = (byte1 << 2) | (byte2 >> 4);
+        buf[j + 1] = (byte2 << 4) | (byte3 >> 2);
+        buf[j + 2] = (byte3 << 6) | byte4;
+    }
+    return (buf_t){buf, buf_len};
+}
+
 buf_t fixed_xor(buf_t buf1, buf_t buf2) {
     assert(buf1.len == buf2.len && "buffers must be of the same size");
 
@@ -126,6 +176,12 @@ char *buf_to_hex(buf_t buf) {
     return hexstr;
 }
 
+char *buf_to_str(buf_t buf) {
+    char *str = calloc(1, buf.len + 1);
+    memcpy(str, buf.data, buf.len);
+    return str;
+}
+
 void print_buf_raw(buf_t buf) {
     for (size_t i = 0; i < buf.len; i++) {
         printf("%d", buf.data[i]);
@@ -146,6 +202,39 @@ void print_buf_hex(buf_t buf) {
     }
     printf("\n");
 }
+
+size_t hamming_distance(char *s1, char *s2) {
+    size_t s1len = strlen(s1);
+    size_t s2len = strlen(s2);
+    assert(s1len == s2len && "Passed strings of different length");
+
+    size_t diff_bits = 0;
+    for (size_t i = 0; i < s1len; i++) {
+        u8 xored = s1[i] ^ s2[i];
+        while (xored) {
+            diff_bits += xored & 0x01;
+            xored >>= 1;
+        }
+
+    }
+    return diff_bits;
+}
+
+size_t hamming_distance_buf(buf_t b1, buf_t b2) {
+    assert(b1.len == b2.len && "Passed buffers of different length");
+
+    size_t diff_bits = 0;
+    for (size_t i = 0; i < b1.len; i++) {
+        u8 xored = b1.data[i] ^ b2.data[i];
+        while (xored) {
+            diff_bits += xored & 0x01;
+            xored >>= 1;
+        }
+
+    }
+    return diff_bits;
+}
+
 
 bool string_equals(const char *s1, const char *s2) {
     if (!s1 || !s2) {
